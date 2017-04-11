@@ -27,9 +27,6 @@ class ProgrammableRouter:
 		req = self.session.post("%s/index.php" % self.router, data=d)
 
 		if 'Login to pfSense' not in req.text:
-			#determine version number
-			#print req.text
-
 			sysinfo = {}
 
 			soup = BeautifulSoup(req.text, 'html.parser')
@@ -44,7 +41,6 @@ class ProgrammableRouter:
 					elif element.name == 'td':
 						val = element.get_text().strip().replace("\n","").replace("\t"," ")
 				
-				#print "%s: %s" % (key, val)
 				sysinfo[key] = val
 
 			self.sysinfo = sysinfo
