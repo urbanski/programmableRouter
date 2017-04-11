@@ -53,8 +53,10 @@ class ProgrammableRouter:
 		for tr in tbody_results.children:
 			if tr.name == 'tr':
 				tags = [x for x in tr.children if x.name == 'td']
+				print tags
 				if len(tags) > 2:
+					alias_id = list(tags[3].children)[1].get('href').split("=")[1]
 					alias_name = tags[0].get_text().strip()
 					alias_ips = tags[1].get_text().strip().split(", ")
-					aliases.append({'name': alias_name, 'ips': alias_ips})
+					aliases.append({'id': alias_id, 'name': alias_name, 'ips': alias_ips})
 		return aliases
