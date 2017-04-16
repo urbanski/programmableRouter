@@ -9,11 +9,21 @@ session = requests.session()
 class ProgrammableRouter:
 
     def __init__(self, router, username=None, password=None):
+        """
+        Initialize a programmable router.
+        :param router: the router url (eg: http://10.10.10.1)
+        :param username: router admin username
+        :param password: router admin password
+        """
         self.router = router
         self.username = username
         self.password = password
 
     def login(self):
+        """
+        Initialize a session with the router.
+        :return: boolean based on login success
+        """
         d = {'usernamefld': self.username, 'passwordfld': self.password, 'login':''}
 
         req = session.get("%s/index.php" % self.router)
@@ -44,8 +54,15 @@ class ProgrammableRouter:
                 sysinfo[key] = val
 
             self.sysinfo = sysinfo
+            return True
+        else:
+            return False
 
     def get_fw_aliases(self):
+        """
+        Get firewall aliases
+        :return: a list of firewall alias dicts
+        """
         req = session.get("%s/firewall_aliases.php?tab=all" % self.router)
         soup = BeautifulSoup(req.text, 'html.parser')
         tbody_results = soup.find('tbody', recursive=True)
@@ -63,6 +80,13 @@ class ProgrammableRouter:
         return aliases
 
     def save_fw_alias(self, id, name, value):
+        """
+        Update/save a firewall alias
+        :param id: (int) alias id
+        :param name: (str) alias name
+        :param value: (list) alias values
+        :return: 
+        """
         data = {'name': name, 'id': id, 'save': 'Save', 'tab': 'all', 'type': 'host'}
 
         iter_num = 0
